@@ -7,31 +7,21 @@ function rangesStream (ranges) {
   var currentRange = ranges.shift()
   return through(function processChunk (chunk, enc, cb) {
     if (!(currentRange)) return cb()
-    var bufEnd = currentRange.end - pos
-    if (pos <= currentRange.start) {
-      if (pos + chunk.length > currentRange.start) {
-        var bufStart = currentRange.start - pos
-        if (currentRange.end <= pos + chunk.length) {
-          this.push(chunk.slice(bufStart, bufEnd))
-          currentRange = ranges.shift() // next Range
-          pos += bufEnd
-          return processChunk.bind(this)(chunk.slice(bufEnd), enc, cb)
-        } else {
-          // the range continues to the next chunk
-          this.push(chunk.slice(bufStart))
-        }
-      }
-    } else {
+
+    if (pos + chunk.length > currentRange.start) {
+      var bufStart = Math.max(currentRange.start - pos, 0)
+      var bufEnd = currentRange.end - pos
       if (currentRange.end <= pos + chunk.length) {
-        this.push(chunk.slice(0, bufEnd))
-        // there could be more
+        this.push(chunk.slice(bufStart, bufEnd))
+        currentRange = ranges.shift() // next Range
         pos += bufEnd
-        currentRange = ranges.shift()
         return processChunk.bind(this)(chunk.slice(bufEnd), enc, cb)
       } else {
-        this.push(chunk)
+        // the range continues to the next chunk
+        this.push(bufStart > 0 ? chunk.slice(bufStart) : chunk)
       }
     }
+
     pos += chunk.length
     cb()
   })
