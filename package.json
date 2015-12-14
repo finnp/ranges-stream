@@ -1,0 +1,22 @@
+{
+  "name": "ranges-stream",
+  "version": "1.0.0",
+  "description": "select ranges of data from a stream",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finnp/ranges-stream.git"
+  },
+  "keywords": [
+    "range"
+  ],
+  "author": "Finn Pauls",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/finnp/ranges-stream/issues"
+  },
+  "homepage": "https://github.com/finnp/ranges-stream"
+}
